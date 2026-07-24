@@ -47,7 +47,7 @@ import deepinv as dinv
 from deepinv.physics import PET
 from deepinv.utils.phantoms import generate_pet_phantom
 import torch
-import parallelproj
+import parallelproj.pet_scanners
 from array_api_compat import torch as torch_compat
 
 # %%

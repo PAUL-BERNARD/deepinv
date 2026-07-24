@@ -7,7 +7,10 @@ import contextlib
 import io
 
 if TYPE_CHECKING:
-    import parallelproj
+    import parallelproj.operators
+    import parallelproj.pet_scanners
+    import parallelproj.pet_lors
+    import parallelproj.projectors
 
 
 class PET(LinearPhysics):
@@ -124,6 +127,7 @@ class PET(LinearPhysics):
         attenuation: torch.Tensor | None = None,
         **kwargs,
     ):
+
         super().__init__(**kwargs)
         if isinstance(img_size, tuple):
             # remove first entries = 1
@@ -136,7 +140,10 @@ class PET(LinearPhysics):
 
         try:  # avoids doctest failing when parallelproj prints banner
             with contextlib.redirect_stdout(io.StringIO()):
-                import parallelproj
+                import parallelproj.operators
+                import parallelproj.pet_scanners
+                import parallelproj.pet_lors
+                import parallelproj.projectors
                 from array_api_compat import torch as torch_compat
         except ImportError:
             raise ImportError(
@@ -164,13 +171,13 @@ class PET(LinearPhysics):
             )
 
         # setup the LOR descriptor that defines the sinogram
-        lor_desc = parallelproj.RegularPolygonPETLORDescriptor(
+        lor_desc = parallelproj.pet_lors.RegularPolygonPETLORDescriptor(
             scanner,
             radial_trim=radial_trim,
-            sinogram_order=parallelproj.SinogramSpatialAxisOrder.RVP,
+            sinogram_order=parallelproj.pet_lors.SinogramSpatialAxisOrder.RVP,
         )
 
-        self.proj = parallelproj.RegularPolygonPETProjector(
+        self.proj = parallelproj.projectors.RegularPolygonPETProjector(
             lor_desc, img_shape=img_size, voxel_size=voxel_size
         )
 
@@ -189,10 +196,10 @@ class PET(LinearPhysics):
         if attenuation is None:
             attenuation = torch.zeros((1, 1) + self.img_size, device=device)
 
-        self.res_model = parallelproj.GaussianFilterOperator(
+        self.res_model = parallelproj.operators.GaussianFilterOperator(
             img_size, sigma=fwhm_data_mm / (2.35 * self.proj.voxel_size)
         )
-        self.pet_lin_op = parallelproj.CompositeLinearOperator(
+        self.pet_lin_op = parallelproj.operators.CompositeLinearOperator(
             (self.proj, self.res_model)
         )
 
@@ -359,7 +366,7 @@ class LinearSingleChannelOperator(torch.autograd.Function):
 
     @staticmethod
     def forward(
-        ctx, x: torch.Tensor, operator: parallelproj.LinearOperator
+        ctx, x: torch.Tensor, operator: parallelproj.operators.LinearOperator
     ) -> torch.Tensor:
         r"""
         Forward pass for a mini-batch of 3D images using a linear operator.
@@ -368,7 +375,7 @@ class LinearSingleChannelOperator(torch.autograd.Function):
             Context object that can be used to store information for the backward pass.
         :param x: torch.Tensor
             Mini-batch of 3D images with dimension (batch_size, 1, num_voxels_x, num_voxels_y, num_voxels_z).
-        :param operator: parallelproj.LinearOperator
+        :param operator: parallelproj.operators.LinearOperator
             Linear operator that can act on a single 3D image.
 
         :return: torch.Tensor
@@ -440,7 +447,7 @@ class AdjointLinearSingleChannelOperator(torch.autograd.Function):
 
     @staticmethod
     def forward(
-        ctx, x: torch.Tensor, operator: parallelproj.LinearOperator
+        ctx, x: torch.Tensor, operator: parallelproj.operators.LinearOperator
     ) -> torch.Tensor:
         """forward pass of the adjoint of the linear operator
 
@@ -450,7 +457,7 @@ class AdjointLinearSingleChannelOperator(torch.autograd.Function):
             that can be used to store information for the backward pass
         x : torch.Tensor
             mini batch of 3D images with dimension (batch_size, 1, operator.out_shape)
-        operator : parallelproj.LinearOperator
+        operator : parallelproj.operators.LinearOperator
             linear operator that can act on a single 3D image
 
         Returns
