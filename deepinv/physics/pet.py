@@ -196,10 +196,10 @@ class PET(LinearPhysics):
         if attenuation is None:
             attenuation = torch.zeros((1, 1) + self.img_size, device=device)
 
-        # We convert the kernel sigma to a python list because it is flipped by scipy by slicing with a negative step ([::-1])
+        # We convert the kernel sigma to a numpy array because it is flipped by scipy by slicing with a negative step ([::-1])
         # Which is unsupported by torch tensors. See related discussion: https://github.com/deepinv/deepinv/pull/1298
         self.res_model = parallelproj.operators.GaussianFilterOperator(
-            img_size, sigma=(fwhm_data_mm / (2.35 * self.proj.voxel_size).tolist())
+            img_size, sigma=(fwhm_data_mm / (2.35 * self.proj.voxel_size).cpu().detach().numpy())
         )
         self.pet_lin_op = parallelproj.operators.CompositeLinearOperator(
             (self.proj, self.res_model)
