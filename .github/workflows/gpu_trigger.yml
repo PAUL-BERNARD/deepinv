@@ -27,7 +27,7 @@ jobs:
     steps:
 
       - name: Get PR number
-        id: pr
+        id: pr_number
         run: |
           echo "pr_number=${{ github.event.inputs.pr_number }}"
           echo "${{ github.event.issue.number }}"
