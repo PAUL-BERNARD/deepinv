@@ -275,7 +275,7 @@ unfolded, deep equilibrium models
    :target: https://www.python.org/downloads/release/python-3100/
 .. |codecov| image:: https://codecov.io/gh/deepinv/deepinv/branch/main/graph/badge.svg?token=77JRvUhQzh
    :target: https://codecov.io/gh/deepinv/deepinv
-.. |pip install| image:: https://img.shields.io/pypi/dm/deepinv.svg?logo=pypi&label=pip%20install&color=fedcba
+.. |pip install| image:: https://static.pepy.tech/personalized-badge/deepinv?period=monthly&right_color=ORANGE
    :target: https://pypistats.org/packages/deepinv
 .. |discord| image:: https://dcbadge.limes.pink/api/server/qBqY5jKw3p?style=flat
    :target: https://discord.gg/qBqY5jKw3p
