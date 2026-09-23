@@ -1,7 +1,17 @@
-.. image:: https://github.com/deepinv/deepinv/raw/main/docs/source/figures/deepinv_logolarge.png
-   :width: 500px
-   :alt: deepinv logo
-   :align: center
+.. raw:: html
+
+   <p align="center">
+     <img
+       src="https://github.com/deepinv/deepinv/raw/main/docs/source/figures/deepinv_logolarge.png#gh-light-mode-only"
+       width="600"
+       alt="deepinv logo"
+     >
+     <img
+       src="https://github.com/deepinv/deepinv/raw/main/docs/source/figures/logo_large_dark.png#gh-dark-mode-only"
+       width="500"
+       alt="deepinv logo"
+     >
+   </p>
 
 |pip install| |stars| |discord| |colab| |youtube| |paper|
 
