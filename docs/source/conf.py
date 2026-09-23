@@ -496,6 +496,7 @@ html_theme_options = {
         "plausible_analytics_domain": "deepinv.org",
         "plausible_analytics_url": "https://plausible.io/js/script.js",
     },
+    "github_url": "https://github.com/deepinv/deepinv",
 }
 
 
